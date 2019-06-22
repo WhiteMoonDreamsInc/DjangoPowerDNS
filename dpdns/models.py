@@ -50,7 +50,7 @@ class Comments(models.Model):
     comment = models.CharField(max_length=64000)
 
     class Meta:
-        managed = False
+    #     managed = False
         db_table = 'comments'
 
 
@@ -61,7 +61,7 @@ class Cryptokeys(models.Model):
     content = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
+    #     managed = False
         db_table = 'cryptokeys'
 
 
@@ -71,7 +71,7 @@ class Domainmetadata(models.Model):
     content = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
+    #     managed = False
         db_table = 'domainmetadata'
 
 
@@ -84,7 +84,7 @@ class Domains(models.Model):
     account = models.CharField(max_length=40, blank=True, null=True)
 
     class Meta:
-        managed = False
+    #     managed = False
         db_table = 'domains'
 
     def get_records(self):
@@ -176,7 +176,7 @@ class Options(models.Model):
     value = models.CharField(max_length=2000, blank=True, null=True)
 
     class Meta:
-        managed = False
+    #     managed = False
         db_table = 'options'
 
 
@@ -186,7 +186,7 @@ class Records(models.Model):
         RECORD_TYPE_CHOICES.append((enabled_rr_type, enabled_rr_type))
 
     id = models.BigAutoField(primary_key=True)
-    domain = models.ForeignKey(Domains, models.DO_NOTHING, blank=True, null=True)
+    domain = models.ForeignKey('Domains', models.DO_NOTHING, blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     type = models.CharField(max_length=10, blank=True, null=True, choices=RECORD_TYPE_CHOICES)
     content = models.CharField(max_length=64000, blank=True, null=True)
@@ -197,7 +197,7 @@ class Records(models.Model):
     auth = models.BooleanField(default=True)
 
     class Meta:
-        managed = False
+    #     managed = False
         db_table = 'records'
 
 
@@ -209,7 +209,7 @@ class Remote(models.Model):
     nonce = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        managed = False
+    #     managed = False
         db_table = 'remote'
 
 
@@ -219,7 +219,7 @@ class Supermasters(models.Model):
     account = models.CharField(max_length=40)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'supermasters'
         unique_together = (('ip', 'nameserver'),)
 
@@ -230,7 +230,7 @@ class Tsigkeys(models.Model):
     secret = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'tsigkeys'
         unique_together = (('name', 'algorithm'),)
 
@@ -241,7 +241,7 @@ class Users(models.Model):
     type = models.CharField(max_length=20)
 
     class Meta:
-        managed = False
+    #     managed = False
         db_table = 'users'
 
 
@@ -252,8 +252,8 @@ class DomainAccess(models.Model):
         (0, 'User'),
         (10, 'Owner')
     )
-    domain = models.ForeignKey(Domains, related_name="domain_accesses")
-    user = models.ForeignKey(User)
+    domain = models.ForeignKey('Domains', related_name="domain_accesses")
+    user = models.ForeignKey(Users)  # Update user model reference
     permission = models.SmallIntegerField(choices=PERMISSIONS, default=0)
 
     def get_permission_description(self):
@@ -275,7 +275,7 @@ class DomainAccess(models.Model):
 
 
 """class DomainApiAccess(models.Model):
-    domain = models.ForeignKey(Domains, related_name="domain_accesses", unique=True)
+    domain = models.ForeignKey('Domains', related_name="domain_accesses", unique=True)
     token = models.CharField(max_length=256)"""
 
 import rest_framework.authtoken.models
@@ -288,7 +288,7 @@ class Token(models.Model):
     key = models.CharField(max_length=40, db_index=True, unique=True)
     # relation to user is a ForeignKey, so each user can have more than one token
     # user = models.ForeignKey(User, related_name='auth_tokens', on_delete=models.CASCADE, verbose_name=_("User"))
-    domain = models.ForeignKey(Domains, related_name="api_tokens")
+    domain = models.ForeignKey('Domains', related_name="api_tokens")
 
     # class Meta:
     #    unique_together = (('user', 'name'),)
@@ -309,7 +309,7 @@ class APIKey(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
-    domain = models.ForeignKey(Domains, related_name="api_keys")
+    domain = models.ForeignKey('Domains', related_name="api_keys")
     key = models.CharField(max_length=40, unique=True)
 
     class Meta:

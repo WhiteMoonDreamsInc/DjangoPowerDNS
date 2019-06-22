@@ -39,7 +39,7 @@ from DjangoPowerDNS import settings
 from dpdns.api import TokenAuthentication
 from dpdns.forms import LoginForm, DomainAddForm, DomainUserAddForm, DomainClaimForm
 from dpdns.serializers import RecordSerializer
-from models import Domains, DomainAccess, Records
+from .models import Domains, DomainAccess, Records
 
 
 # Create your views here.
@@ -371,7 +371,7 @@ def domain_json_update_record(req, id):
             # return JsonResponse(data={'error': "Name is required"}, status=500)
             name = json_record['name'] + "." + domain.name
 
-        print "name: " + name
+        print("name: " + name)
 
         if json_record['type'] not in settings.PDNS_ENABLED_RR_TYPES:
             return JsonResponse(data={'error': "Invalid Type"}, status=500)
