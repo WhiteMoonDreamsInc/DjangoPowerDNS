@@ -40,11 +40,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'soome-secret-key--please-change-me-now'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [
-    u'i.am.allowed.host'
-]
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -109,16 +107,30 @@ WSGI_APPLICATION = 'DjangoPowerDNS.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'powerdns',
+#         'USER': 'powerdns',
+#         'PASSWORD': 'powerdns-password',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'powerdns',
-        'USER': 'powerdns',
-        'PASSWORD': 'powerdns-password',
-        'HOST': 'localhost',
-        'PORT': '3306',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.getenv('POSTGRES_DB', "powerdns"),
+        "USER": os.getenv('POSTGRES_USER', "django"),
+        "PASSWORD": os.getenv('POSTGRES_PASSWORD', "password"),
+        "HOST": os.getenv('POSTGRES_HOST', "localhost"),
+        "PORT": os.getenv('POSTGRES_PORT', ""),
     }
 }
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
